@@ -1,5 +1,7 @@
 package numbers
 
+import scala.io.StdIn.readLine
+
 sealed trait Digit
 case object Zero  extends Digit
 case object One   extends Digit
@@ -136,11 +138,13 @@ object NumberConverter {
   }
 }
 
-object Hello extends Greeting with App {
+object Application extends App {
+  print("Enter an integer: ")
 
-  println(greeting)
-}
-
-trait Greeting {
-  lazy val greeting: String = "hello"
+  NumberConverter.parseString(readLine).flatMap(NumberConverter.englishNumber) match {
+    case Some(str) =>
+      println(str)
+    case None =>
+      println("Invalid input!")
+  }
 }
