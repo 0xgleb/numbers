@@ -21,17 +21,23 @@ class HelloSpec extends FunSpec with Matchers {
     }
 
     describe("englishTens") {
-      it("return the English word for the given digit") {
-        englishTens(Zero)  shouldEqual "zero"
-        englishTens(One)   shouldEqual "ten"
-        englishTens(Two)   shouldEqual "twenty"
-        englishTens(Three) shouldEqual "thirty"
-        englishTens(Four)  shouldEqual "fourty"
-        englishTens(Five)  shouldEqual "fifty"
-        englishTens(Six)   shouldEqual "sixty"
-        englishTens(Seven) shouldEqual "seventy"
-        englishTens(Eight) shouldEqual "eighty"
-        englishTens(Nine)  shouldEqual "ninety"
+      describe("if the given number isn't zero") {
+        it("return the English word for the given digit") {
+          englishTens(One)   shouldEqual "ten"
+          englishTens(Two)   shouldEqual "twenty"
+          englishTens(Three) shouldEqual "thirty"
+          englishTens(Four)  shouldEqual "fourty"
+          englishTens(Five)  shouldEqual "fifty"
+          englishTens(Six)   shouldEqual "sixty"
+          englishTens(Seven) shouldEqual "seventy"
+          englishTens(Eight) shouldEqual "eighty"
+          englishTens(Nine)  shouldEqual "ninety"
+        }
+      }
+      describe("otherwise") {
+        it("returns an empty string") {
+          englishTens(Zero) shouldEqual ""
+        }
       }
     }
 
@@ -76,6 +82,30 @@ class HelloSpec extends FunSpec with Matchers {
           parseString("-")    shouldEqual None
           parseString("123a") shouldEqual None
         }
+      }
+    }
+
+    describe("englishNumber") {
+      it("returns the number in English words") {
+        englishNumber(Integer(true, List(One)))   shouldEqual Some("minus one")
+        englishNumber(Integer(false, List(Zero))) shouldEqual Some("zero")
+
+        englishNumber(Integer(false, List(Two, One)))   shouldEqual Some("twenty one")
+        englishNumber(Integer(false, List(Nine, Zero))) shouldEqual Some("ninety")
+
+        englishNumber(Integer(false, List(One, Zero, Five)))   shouldEqual Some("one hundred and five")
+        englishNumber(Integer(false, List(Five, One, Zero)))   shouldEqual Some("five hundred and ten")
+        englishNumber(Integer(true,  List(Seven, Zero, Zero))) shouldEqual Some("minus seven hundred")
+
+        englishNumber(Integer(false, List(Eight, Zero, Zero, Zero))) shouldEqual
+          Some("eight thousand")
+        englishNumber(Integer(false, List(Eight, Zero, Seven, Zero))) shouldEqual
+          Some("eight thousand, seventy")
+        englishNumber(Integer(true, List(One, Two, Three, Four, Five))) shouldEqual
+          Some("minus twelve thousand, three hundred and fourty five")
+
+        englishNumber(Integer(false, List(Five, Six, Nine, Four, Five, Seven, Eight, One))) shouldEqual
+          Some("fifty six million, nine hundred and fourty five thousand, seven hundred and eighty one")
       }
     }
   }
